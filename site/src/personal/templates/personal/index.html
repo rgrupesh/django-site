@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<div style="border: 2px solid #000;">
+    <h1> This is the body. Index html</h1>
+    <p>accessing from index.html</p>
+
+    {% for item in list_of_values %}
+        {% include "personal/snippets/body_snippets.html" with value=item %} <br>
+    {% endfor %}
+</div>
+
+{% endblock content%}
