@@ -1,0 +1,5 @@
+bin/
+lib/
+*.cfg
+db.*
+mysite/__pycache__
