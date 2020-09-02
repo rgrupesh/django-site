@@ -4,7 +4,12 @@
         <title>
             Rupesh's
         </title>
-        <h1> This is head</h1>
+        {% if request.user.is_authenticated %}
+            <p> Hello, {{request.user.username}} | <a href="{% url 'logout' %}">Logout</a></p>
+        {% else%}
+        <p> <a href="{% url "register" %}">Register</a> | <a href="#">Login</a></p>
+        {% endif %}
+        <hr>
     </head>
     <body>
         {% block content %}
@@ -12,6 +17,7 @@
         {% endblock content %}
     </body>
     <footer>
-        <h3>Footer</h3>
+        <hr>
+        <p>Rupesh's blog | 2020</p>
     </footer>
 </html>

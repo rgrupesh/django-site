@@ -2,13 +2,9 @@
 
 {% block content%}
 
-<div style="border: 2px solid #000;">
-    <h1> This is the body. Index html</h1>
-    <p>accessing from index.html</p>
-
-    {% for question in questions %}
-        {% include "personal/snippets/body_snippets.html" with value=question %} <br>
-    {% endfor %}
-</div>
+<h3>Registered Users</h3>
+{% for user in users %}
+    {{ user }} <br>
+{% endfor %}
 
 {% endblock content%}

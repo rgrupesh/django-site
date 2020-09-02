@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from personal.models import Question
+from account.models import Account
 
 def render_home_view(request):
 
     context = {}
 
-    questions = Question.objects.all()
-    context["questions"] = questions
+    users = Account.objects.all()
+    context["users"] = users
+    
 
     return render(request, "personal/index.html", context)
