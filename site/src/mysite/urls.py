@@ -18,7 +18,8 @@ from django.urls import path
 from personal.views import render_home_view
 from account.views import (
     registration_view,
-    logout_view
+    logout_view,
+    login_view,
 )    
 
 urlpatterns = [
@@ -26,4 +27,6 @@ urlpatterns = [
     path("",render_home_view, name="home"),
     path("register/",registration_view, name="register"),
     path("logout/",logout_view, name="logout"),
+    path("login/",login_view, name="login"),
+
 ]
