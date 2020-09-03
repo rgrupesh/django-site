@@ -2,9 +2,17 @@
 
 {% block content%}
 
-<h3>Registered Users</h3>
-{% for user in users %}
-    {{ user }} <br>
-{% endfor %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Personal Blog</h1>
+    <p class="lead">Welcome to my Blog</p>
+  </div>
+<div class="container">
+    <div class="d-flex flex-column">
+        <h3>Registered Users</h3>
+            {% for user in users %}
+                {{ user }} <br>
+            {% endfor %}
+    </div>
+</div>  
 
 {% endblock content%}
