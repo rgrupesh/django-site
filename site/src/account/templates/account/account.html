@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<h2>Account</h2>
+<form method="POST">{% csrf_token %}
+    {% for field in account_form %}
+        <p>
+            {{field.label_tag}}
+            {{field}}
+
+            {% if field.help_text %}
+                <p style="color:grey;">{{field.help_text}}</p>
+            {% endif %}
+
+            {% for error in field.errors %}
+                <p style="color:red;">{{error}}</p>
+            {% endfor %}
+            {% if account_form.non_field_error %}
+                <div style="color:red;">
+                    <p>{{account_form.non_field_error}}</p>
+                </div>
+            {% endif %}
+        </p>
+    {% endfor %}
+    <button type="submit">Save Changes</button>
+</form>
+
+{% endblock content%}
