@@ -14,7 +14,7 @@ def registration_view(request):
             login(request,account)
             return redirect("home")
         else:
-            context["registration_form"] = form
+            context["registration_form"] = form      
     else:
         form = RegistrationForm()
         context["registration_form"] = form
@@ -30,12 +30,13 @@ def login_view(request):
 
     if user.is_authenticated:
         return redirect("home")
+
     if request.POST:
         form = AccountAuthenticationForm(request.POST)
 
         if form.is_valid():
-            email = request.POST["email"]
-            password = request.POST["password"]
+            email = request.POST['email']
+            password = request.POST['password']
             user = authenticate(email=email,password=password)
 
             if user:
@@ -57,7 +58,12 @@ def account_view(request):
     if request.POST:
         form = AccountUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
+            form.initial = {
+                "email": request.POST["email"],
+                "username": request.POST["username"]
+            }
             form.save()
+        context["success_msg"] = "Updated"    
     else:
         form = AccountUpdateForm(
             initial= {

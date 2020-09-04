@@ -20,11 +20,11 @@ class AccountAuthenticationForm(forms.ModelForm):
         fields = ("email", "password")
 
     def clean(self):
-        if self.is_valid:
+        if self.is_valid():
             email = self.cleaned_data["email"]
             password = self.cleaned_data["password"]
             if not authenticate(email=email, password=password):
-                raise forms.ValidationError("Invalid Login")
+                    raise forms.ValidationError("Invalid Login")
 
 class AccountUpdateForm(forms.ModelForm):
 
@@ -39,7 +39,7 @@ class AccountUpdateForm(forms.ModelForm):
                 account = Account.objects.exclude(pk=self.instance.pk).get(email=email)
             except Account.DoesNotExist:
                 return email
-            raise forms.ValidationError(' Email "%s" is already in use.' %account.email)
+            raise forms.ValidationError(' Email "%s" is already in use.' % account)
 
     def clean_username(self):
         if self.is_valid():
@@ -48,5 +48,5 @@ class AccountUpdateForm(forms.ModelForm):
                 account = Account.objects.exclude(pk=self.instance.pk).get(username=username)
             except Account.DoesNotExist:
                 return username
-            raise forms.ValidationError('USername "%s" is already in use.' %account.username)                                
+            raise forms.ValidationError('USername "%s" is already in use.' % username)                                
 

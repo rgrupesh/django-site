@@ -8,7 +8,7 @@ class MyAccountManger(BaseUserManager):
         if not email:
             raise ValueError("User must have email address")
         if not username:
-            raise ValueError("user must have usrname")
+            raise ValueError("user must have username")
 
         user = self.model(
             email = self.normalize_email(email),
@@ -54,8 +54,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def has_parm(self, parm, obj = None):
+    def has_perm(self, parm, obj = None):
         return self.is_admin
 
-    def has_module_parms(self,app_label):
+    def has_module_perms(self,app_label):
         return True        
