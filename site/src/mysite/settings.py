@@ -37,6 +37,7 @@ if DEBUG:
 INSTALLED_APPS = [
     'personal',
     'account',
+    'blog',
 
     'django.contrib.admin',
     'django.contrib.auth',
