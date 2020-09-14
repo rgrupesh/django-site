@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content%}
 
@@ -40,6 +41,9 @@
 </style>
 
 <form class="form-signin" method="POST">{% csrf_token %}
+  <div class="d-flex flex-column pb-3">
+    <img class="img-fluid mx-auto d-block" src="{% static 'heisenberg-logo.jpg' %}" alt="logo" width="72" height="72">
+  </div>
     <h1 class="h3 mb-3 font-weight-normal">Register</h1>
     <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
     <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username">
