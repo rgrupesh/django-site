@@ -26,16 +26,19 @@ from account.views import (
     logout_view,
     login_view,
     account_view,
+    must_authenticate_view,
 )    
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path("",render_home_view, name="home"),
-    path("register/",registration_view, name="register"),
-    path("blog/", include("blog.urls","blog")),
-    path("logout/",logout_view, name="logout"),
-    path("login/",login_view, name="login"),
     path("account/",account_view, name="account"),
+    path('admin/', admin.site.urls),
+    path("blog/", include("blog.urls","blog")),
+    path("login/",login_view, name="login"),    
+    path("logout/",logout_view, name="logout"),
+    path("must_authenticate/",must_authenticate_view, name="must_authenticate"),
+    path("register/",registration_view, name="register"),
+
     
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), 
         name='password_change_done'),
