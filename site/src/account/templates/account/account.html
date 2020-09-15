@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content%}
 
@@ -32,6 +32,11 @@
 .h3{
     text-align: center;
 }
+.blog-posts{
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+}
 </style>
 
 <form class="form-signin" method="POST">{% csrf_token %}
@@ -60,6 +65,25 @@
   </form>
   <div class="d-flex flex-column">
     <a class="m-auto" href="{% url 'password_change'%}">Change Password</a>
+  </div>
+
+  <div class='container mt-4 p-4'>
+    <div class='row'>
+      <div class='blog-posts'>
+        <h3 class='h3 mb-3 font-weight-normal'>Blog Posts</h3>
+        {% if blog_posts %}
+        <ul>
+          {% for post in blog_posts %}
+          <a href="{% url 'blog:detail' post.slug %}" style='text-decoration: none;'>
+            <li class='list-group-item'>{{post}}</li>
+          </a>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>You don't have post. Create post <a href="{% url 'blog:create' %}">here</a>.</p>
+        {% endif %}
+      </div>
+    </div>
   </div>
 
 {% endblock content%}
