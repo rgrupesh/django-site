@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block content%}
-
+{% block content %}
 <style type="text/css">
 
 	@media (max-width: 768px) { 
@@ -36,36 +36,54 @@
 		font-size: 17px;
 	}
 </style>
- 
+
+
+<!-- main content -->
 <div class="container">
-    <div class="row">
-        <div class="create-post-bar" d-lg-none col-lg-7 offset-lg-1>
-            <a href="{% url 'blog:create' %}">create post</a>
-        </div>
+	<div class="row">
 
-        <div class="left-column col-lg-7 offset-lg-1">
-            <div class="blog-post-container">
-                <p>Thingy</p>
-            </div>
-            <div class="blog-post-container">
-                <p>Thingy</p>
-            </div>
-            <div class="blog-post-container">
-                <p>Thingy</p>
-            </div>
-        </div>
+		<!-- blog feed -->
+		<div class="left-column col-lg-7 offset-lg-1">
 
-        <div class="right-column col-lg-3 d-lg-flex d-none flex-column">
-            <div class="create-post-bar">
-                <p>stuff</p>
-                <p>stuff</p>
-                <p>stuff</p>
-                <a href="{% url 'blog:create' %}">Create Post</a>
-            </div>            
-        </div>
+			<!-- Top 'create post' bar -->
+			<div class="d-lg-none mb-3">
+				<div class="card m-auto d-flex flex-column p-3">
+					<img class="img-fluid d-block m-auto pb-2" src="{% static 'heisenberg-logo.jpg' %}" width="72" height="72">
+					<p class="lead">CRUD web app.</p>
+					<p class="m-auto"><a class="btn btn-primary" href="{% url 'blog:create' %}">Create post</a></p>
+				</div>
+			</div>
+			<!-- end Top 'create post' bar -->
+
+			<!-- Blog posts-->
+
+			{% for post in blog_posts %}
+				<div class="blog-post-container">
+					{% include 'blog/snippets/blog_post_snippet.html' with blog_post=post %}
+				</div>
+			{% endfor %}
+			
+			<!-- End Blog posts-->
+
+		</div>
+		<!-- end blog feed -->
 
 
-    </div>
-</div>  
+		<!-- Right 'create post' column  -->
+		<div class="right-column col-lg-3 d-lg-flex d-none flex-column">
 
-{% endblock content%}
+			<div class="card create-post-bar d-flex flex-column p-3">
+				<img class="img-fluid d-block m-auto pb-2" src="{% static 'heisenberg-logo.jpg' %}" width="72" height="72">
+				<p class="lead">CRUD web app</p>
+				<p class="m-auto"><a class="btn btn-primary" href="{% url 'blog:create' %}">Create post</a></p>
+			</div>
+		
+		</div>
+		<!-- end Right 'create post' column  -->
+
+
+
+	</div>
+</div>
+
+{% endblock content %}

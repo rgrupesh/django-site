@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import BlogPost
+from django.http import HttpResponse
 from blog.forms import CreateBlogPostForm, UpdateBlogPostForm
 from account.models import Account
 
@@ -38,9 +39,14 @@ def edit_blog_view(request, slug):
 
 	user = request.user
 	if not user.is_authenticated:
-		return redirect('must_authenticate')
+		return redirect('must_authenticate')	
 
 	blog_post = get_object_or_404(BlogPost,slug=slug)
+	
+	if blog_post.author != user:
+		return HttpResponse("You are not authorized to edit this blog post")	
+
+
 	if request.POST:
 		form = UpdateBlogPostForm(request.POST or None, request.FILES or None, instance=blog_post)
 		if form.is_valid():
