@@ -41,6 +41,7 @@ urlpatterns = [
     
 
     path('blog/api/', include('blog.api.urls','blog_api')),
+    path('account/api/', include('account.api.urls','account_api')),
 
     
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), 
