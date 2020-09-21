@@ -1,12 +1,14 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from account.models import Account
 from blog.models import BlogPost
 from blog.api.serializers import BlogPostSerializers
 
 @api_view(['GET',])
+@permission_classes((IsAuthenticated,))
 def api_detail_blog_view(request,slug):
 
     try:
@@ -19,12 +21,17 @@ def api_detail_blog_view(request,slug):
 
 
 @api_view(['PUT',])
+@permission_classes((IsAuthenticated,))
 def api_update_blog_view(request,slug):
 
     try:
         blog_post = BlogPost.objects.get(slug=slug)
     except BlogPost.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if blog_post.author != user:
+        return Response({'response':"You don't have permission to update blog"})
 
     serializer = BlogPostSerializers(blog_post, data=request.data)
     data ={}
@@ -36,12 +43,17 @@ def api_update_blog_view(request,slug):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE',])
+@permission_classes((IsAuthenticated,))
 def api_delete_blog_view(request,slug):
 
     try:
         blog_post = BlogPost.objects.get(slug=slug)
     except BlogPost.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)            
+        return Response(status=status.HTTP_404_NOT_FOUND)  
+
+    user = request.user
+    if blog_post.author != user:
+        return Response({'response':"You cannot delete blog"})              
 
     operation = blog_post.delete()
     if operation:
@@ -52,9 +64,10 @@ def api_delete_blog_view(request,slug):
         return Response(data=data)
 
 @api_view(['POST',])
+@permission_classes((IsAuthenticated,))
 def api_create_blog_view(request):
 
-    account= Account.objects.get(pk=1)
+    account= request.user
 
     blog_post = BlogPost(author=account)
 
