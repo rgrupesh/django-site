@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-# Create your models here.
+from django.conf import settings
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.db.models.signals import post_save
 
 class MyAccountManger(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -59,3 +62,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self,app_label):
         return True        
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)        
