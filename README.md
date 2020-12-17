@@ -6,6 +6,6 @@
 3. `pip3 install requirements.txt`
 4. `python3 manage.py runserver`
 
-![](home.png)
+![](screenshots/home.png)
 
-![](account.png)
+![](screenshots/account.png)
