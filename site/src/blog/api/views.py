@@ -7,22 +7,23 @@ from account.models import Account
 from blog.models import BlogPost
 from blog.api.serializers import BlogPostSerializers
 
-@api_view(['GET',])
+
+@api_view(['GET', ])
 @permission_classes((IsAuthenticated,))
-def api_detail_blog_view(request,slug):
+def api_detail_blog_view(request, slug):
 
     try:
         blog_post = BlogPost.objects.get(slug=slug)
     except BlogPost.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)    
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer= BlogPostSerializers(blog_post)
+    serializer = BlogPostSerializers(blog_post)
     return Response(serializer.data)
 
 
-@api_view(['PUT',])
+@api_view(['PUT', ])
 @permission_classes((IsAuthenticated,))
-def api_update_blog_view(request,slug):
+def api_update_blog_view(request, slug):
 
     try:
         blog_post = BlogPost.objects.get(slug=slug)
@@ -31,10 +32,10 @@ def api_update_blog_view(request,slug):
 
     user = request.user
     if blog_post.author != user:
-        return Response({'response':"You don't have permission to update blog"})
+        return Response({'response': "You don't have permission to update blog"})
 
     serializer = BlogPostSerializers(blog_post, data=request.data)
-    data ={}
+    data = {}
     if serializer.is_valid():
         serializer.save()
         data['success'] = 'updated successfully'
@@ -42,18 +43,19 @@ def api_update_blog_view(request,slug):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE',])
+
+@api_view(['DELETE', ])
 @permission_classes((IsAuthenticated,))
-def api_delete_blog_view(request,slug):
+def api_delete_blog_view(request, slug):
 
     try:
         blog_post = BlogPost.objects.get(slug=slug)
     except BlogPost.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)  
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     user = request.user
     if blog_post.author != user:
-        return Response({'response':"You cannot delete blog"})              
+        return Response({'response': "You cannot delete blog"})
 
     operation = blog_post.delete()
     if operation:
@@ -63,22 +65,19 @@ def api_delete_blog_view(request,slug):
         data['failure'] = 'delete failed'
         return Response(data=data)
 
-@api_view(['POST',])
+
+@api_view(['POST', ])
 @permission_classes((IsAuthenticated,))
 def api_create_blog_view(request):
 
-    account= request.user
+    account = request.user
 
     blog_post = BlogPost(author=account)
 
-    serializer = BlogPostSerializers(blog_post,data=request.data)
+    serializer = BlogPostSerializers(blog_post, data=request.data)
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status= status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.data, status= status.HTTP_400_BAD_REQUEST)    
-
-
-
-
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)

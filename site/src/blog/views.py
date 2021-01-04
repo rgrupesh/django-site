@@ -4,70 +4,67 @@ from django.http import HttpResponse
 from blog.forms import CreateBlogPostForm, UpdateBlogPostForm
 from account.models import Account
 
+
 def create_blog_view(request):
 
-	context = {}
+    context = {}
 
-	user = request.user
-	if not user.is_authenticated:
-		return redirect('must_authenticate')
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('must_authenticate')
 
-	form = CreateBlogPostForm(request.POST or None, request.FILES or None)
-	if form.is_valid():
-		obj = form.save(commit=False)
-		author = Account.objects.filter(email=user.email).first()
-		obj.author = author
-		obj.save()
-		form = CreateBlogPostForm()
+    form = CreateBlogPostForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        author = Account.objects.filter(email=user.email).first()
+        obj.author = author
+        obj.save()
+        form = CreateBlogPostForm()
 
-	context['form'] = form
+    context['form'] = form
 
-	return render(request, "blog/create_blog.html", context)
+    return render(request, "blog/create_blog.html", context)
+
 
 def detail_blog_view(request, slug):
 
-	context = {}
+    context = {}
 
-	blog_post = get_object_or_404(BlogPost, slug=slug)
-	context['blog_post'] = blog_post
+    blog_post = get_object_or_404(BlogPost, slug=slug)
+    context['blog_post'] = blog_post
 
-	return render(request,'blog/detail_blog_view.html', context)
+    return render(request, 'blog/detail_blog_view.html', context)
+
 
 def edit_blog_view(request, slug):
 
-	context = {}
+    context = {}
 
-	user = request.user
-	if not user.is_authenticated:
-		return redirect('must_authenticate')	
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('must_authenticate')
 
-	blog_post = get_object_or_404(BlogPost,slug=slug)
-	
-	if blog_post.author != user:
-		return HttpResponse("You are not authorized to edit this blog post")	
+    blog_post = get_object_or_404(BlogPost, slug=slug)
 
+    if blog_post.author != user:
+        return HttpResponse("You are not authorized to edit this blog post")
 
-	if request.POST:
-		form = UpdateBlogPostForm(request.POST or None, request.FILES or None, instance=blog_post)
-		if form.is_valid():
-			obj = form.save(commit=False)
-			obj.save()
-			context['success_message'] = "updated"
-			blog_post = obj
+    if request.POST:
+        form = UpdateBlogPostForm(
+            request.POST or None, request.FILES or None, instance=blog_post)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            context['success_message'] = "updated"
+            blog_post = obj
 
-	form = UpdateBlogPostForm(
-		initial={
-			"title":blog_post.title,
-			"body":blog_post.body,
-			"image":blog_post.image
-		}
-	)
-	context['form'] = form
+    form = UpdateBlogPostForm(
+        initial={
+            "title": blog_post.title,
+            "body": blog_post.body,
+            "image": blog_post.image
+        }
+    )
+    context['form'] = form
 
-	return render(request,'blog/edit_blog.html', context)		
-
-
-
-
-
-
+    return render(request, 'blog/edit_blog.html', context)

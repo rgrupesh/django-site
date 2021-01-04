@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
 from blog.models import BlogPost
 
+
 def registration_view(request):
     context = {}
     if request.POST:
@@ -12,18 +13,20 @@ def registration_view(request):
             email = form.cleaned_data.get("email")
             raw_password = form.cleaned_data.get("password1")
             account = authenticate(email=email, password=raw_password)
-            login(request,account)
+            login(request, account)
             return redirect("home")
         else:
-            context["registration_form"] = form      
+            context["registration_form"] = form
     else:
         form = RegistrationForm()
         context["registration_form"] = form
     return render(request, "account/register.html", context)
 
+
 def logout_view(request):
     logout(request)
-    return redirect("home")     
+    return redirect("home")
+
 
 def login_view(request):
     context = {}
@@ -38,17 +41,18 @@ def login_view(request):
         if form.is_valid():
             email = request.POST['email']
             password = request.POST['password']
-            user = authenticate(email=email,password=password)
+            user = authenticate(email=email, password=password)
 
             if user:
-                login(request,user)
+                login(request, user)
                 return redirect("home")
 
     else:
         form = AccountAuthenticationForm()
 
     context["login_form"] = form
-    return render(request,"account/login.html", context)       
+    return render(request, "account/login.html", context)
+
 
 def account_view(request):
     context = {}
@@ -64,20 +68,20 @@ def account_view(request):
                 "username": request.POST["username"]
             }
             form.save()
-        context["success_msg"] = "Updated"    
+        context["success_msg"] = "Updated"
     else:
         form = AccountUpdateForm(
-            initial= {
+            initial={
                 "email": request.user.email,
                 "username": request.user.username,
             }
-        )                    
+        )
     context["account_form"] = form
 
-    blog_posts= BlogPost.objects.filter(author=request.user)
+    blog_posts = BlogPost.objects.filter(author=request.user)
     context['blog_posts'] = blog_posts
     return render(request, "account/account.html", context)
 
 
 def must_authenticate_view(request):
-    return render(request,'account/must_authenticate.html',{})    
+    return render(request, 'account/must_authenticate.html', {})

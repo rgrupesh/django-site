@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 
+
 class MyAccountManger(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -14,35 +15,35 @@ class MyAccountManger(BaseUserManager):
             raise ValueError("user must have username")
 
         user = self.model(
-            email = self.normalize_email(email),
-            username = username,
+            email=self.normalize_email(email),
+            username=username,
         )
 
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
 
-    def create_superuser(self,email,username, password):
+    def create_superuser(self, email, username, password):
         user = self.create_user(
-            email = self.normalize_email(email),
+            email=self.normalize_email(email),
             password=password,
-            username = username,
+            username=username,
         )
 
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
 
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
-
-
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="Email", max_length=60, unique=True)
-    username = models.CharField(verbose_name="username", max_length=30, unique=True)
-    date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
+    username = models.CharField(
+        verbose_name="username", max_length=30, unique=True)
+    date_joined = models.DateTimeField(
+        verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -57,13 +58,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def has_perm(self, parm, obj = None):
+    def has_perm(self, parm, obj=None):
         return self.is_admin
 
-    def has_module_perms(self,app_label):
-        return True        
+    def has_module_perms(self, app_label):
+        return True
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_token(sender, instance=None, created=False, **kwargs):
     if created:
-        Token.objects.create(user=instance)        
+        Token.objects.create(user=instance)

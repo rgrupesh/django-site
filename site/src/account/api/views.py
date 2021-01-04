@@ -6,7 +6,7 @@ from account.api.serializers import RegistrationSerializers
 from rest_framework.authtoken.models import Token
 
 
-@api_view(['POST',])
+@api_view(['POST', ])
 def registration_view(request):
 
     serializer = RegistrationSerializers(data=request.data)
@@ -21,4 +21,3 @@ def registration_view(request):
     else:
         data = serializer.errors
     return Response(data)
-

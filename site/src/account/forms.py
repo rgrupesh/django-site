@@ -4,12 +4,15 @@ from django.contrib.auth import authenticate
 
 from account.models import Account
 
+
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(max_length=60, help_text="Enter valid email address")
+    email = forms.EmailField(
+        max_length=60, help_text="Enter valid email address")
 
     class Meta:
         model = Account
         fields = ("email", "username", "password1", "password2")
+
 
 class AccountAuthenticationForm(forms.ModelForm):
 
@@ -24,7 +27,8 @@ class AccountAuthenticationForm(forms.ModelForm):
             email = self.cleaned_data["email"]
             password = self.cleaned_data["password"]
             if not authenticate(email=email, password=password):
-                    raise forms.ValidationError("Invalid Login")
+                raise forms.ValidationError("Invalid Login")
+
 
 class AccountUpdateForm(forms.ModelForm):
 
@@ -36,17 +40,20 @@ class AccountUpdateForm(forms.ModelForm):
         if self.is_valid():
             email = self.cleaned_data["email"]
             try:
-                account = Account.objects.exclude(pk=self.instance.pk).get(email=email)
+                account = Account.objects.exclude(
+                    pk=self.instance.pk).get(email=email)
             except Account.DoesNotExist:
                 return email
-            raise forms.ValidationError(' Email "%s" is already in use.' % account)
+            raise forms.ValidationError(
+                ' Email "%s" is already in use.' % account)
 
     def clean_username(self):
         if self.is_valid():
             username = self.cleaned_data["username"]
             try:
-                account = Account.objects.exclude(pk=self.instance.pk).get(username=username)
+                account = Account.objects.exclude(
+                    pk=self.instance.pk).get(username=username)
             except Account.DoesNotExist:
                 return username
-            raise forms.ValidationError('USername "%s" is already in use.' % username)                                
-
+            raise forms.ValidationError(
+                'USername "%s" is already in use.' % username)
