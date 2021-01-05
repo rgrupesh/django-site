@@ -21,7 +21,7 @@ class BlogPost(models.Model):
     date_updated = models.DateTimeField(
         auto_now_add=True, verbose_name="date_updated")
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # link to account model
     slug = models.SlugField(blank=True, unique=True)
 
     def __str__(self):
@@ -31,6 +31,8 @@ class BlogPost(models.Model):
 @receiver(post_delete, sender=BlogPost)
 def submission_delete(sender, instance, **kwargs):
     instance.image.delete(False)
+
+# create slug for blog before passing
 
 
 def pre_save_blog_post_receiver(sender, instance, *args, **kwargs):

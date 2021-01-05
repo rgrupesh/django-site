@@ -33,7 +33,7 @@ urlpatterns = [
     path("", render_home_view, name="home"),
     path("account/", account_view, name="account"),
     path('admin/', admin.site.urls),
-    path("blog/", include("blog.urls", "blog")),
+    path("blog/", include("blog.urls", "blog")),  # blog inside url
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("must_authenticate/", must_authenticate_view, name="must_authenticate"),
@@ -43,7 +43,7 @@ urlpatterns = [
     path('blog/api/', include('blog.api.urls', 'blog_api')),
     path('account/api/', include('account.api.urls', 'account_api')),
 
-
+    # built in views customization
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'),
          name='password_change_done'),
 

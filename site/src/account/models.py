@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 
 
 class MyAccountManger(BaseUserManager):
+    # custom manager for user model
     def create_user(self, email, username, password=None):
         if not email:
             raise ValueError("User must have email address")
@@ -15,6 +16,7 @@ class MyAccountManger(BaseUserManager):
             raise ValueError("user must have username")
 
         user = self.model(
+            # only available inside BaseUserManager
             email=self.normalize_email(email),
             username=username,
         )
@@ -56,9 +58,11 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = MyAccountManger()
 
     def __str__(self):
+        # defaults to templates
         return self.email
 
     def has_perm(self, parm, obj=None):
+        # user permission
         return self.is_admin
 
     def has_module_perms(self, app_label):
